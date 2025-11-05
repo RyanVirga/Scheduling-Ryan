@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 
+import { resolveAppBaseUrl } from "@/lib/url";
+
 export const revalidate = 0;
 
 type CancelPageProps = {
@@ -17,11 +19,9 @@ type CancelApiResponse = {
 };
 
 async function requestCancellation(token: string): Promise<{ result: CancelApiResponse; statusCode: number }> {
-  const headerList = headers();
-  const host = headerList.get("x-forwarded-host") ?? headerList.get("host") ?? "localhost:3000";
-  const protocol = headerList.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
-
-  const endpoint = new URL(`${protocol}://${host}/cancel`);
+  const headerList = await headers();
+  const baseUrl = resolveAppBaseUrl(headerList);
+  const endpoint = new URL("/cancel", baseUrl);
   endpoint.searchParams.set("token", token);
 
   try {

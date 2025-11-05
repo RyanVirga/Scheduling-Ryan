@@ -22,6 +22,7 @@ Production-friendly scheduling UI that syncs against Google Calendar and renders
    - `GOOGLE_CALENDAR_ID` (use a single calendar ID or comma-separated list)
    - `SIGNING_SECRET` (use `openssl rand -base64 48` to generate)
    - `HOST_TIMEZONE` / `TZ_DEFAULT_HOST` (IANA identifiers, e.g. `America/Los_Angeles`)
+   - `NEXT_PUBLIC_APP_URL` (set to the deployed base URL, e.g. `https://scheduling-ryan-git-main-ryanvirgas-projects.vercel.app`)
 
 3. In Google Calendar settings for each host calendar, enable **Automatically send event updates** so attendees receive confirmations and changes.
 
@@ -34,6 +35,10 @@ Production-friendly scheduling UI that syncs against Google Calendar and renders
 - Tests (Vitest): `npm run test`
 
 The scheduler fetches FreeBusy data in UTC and only converts to a guest timezone in the React client when rendering labels.
+
+## Deployment
+
+- On Vercel (or any production host), set `NEXT_PUBLIC_APP_URL` (or `NEXT_PUBLIC_SITE_URL`) to the public base URL so server components construct absolute links with the correct domain.
 
 ## Key Endpoints
 

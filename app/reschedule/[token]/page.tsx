@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { headers } from 'next/headers';
 
 import BookingClient from '@/app/book/[type]/BookingClient';
+import { resolveAppBaseUrl } from '@/lib/url';
 import type { AvailabilityByDate, MeetingType, UtcSlot } from '@/lib/slots';
 
 export const revalidate = 0;
@@ -34,70 +35,10 @@ type RescheduleErrorResponse = {
 
 type RescheduleApiResponse = RescheduleSuccessResponse | RescheduleErrorResponse;
 
-function normaliseHeaders(headerList: HeadersInit | null | undefined): Headers {
-  const normalized = new Headers();
-
-  if (!headerList) {
-    return normalized;
-  }
-
-  if (typeof (headerList as unknown as Headers).forEach === 'function') {
-    (headerList as unknown as Headers).forEach((value, key) => {
-      normalized.append(key, value);
-    });
-
-    return normalized;
-  }
-
-  if (Array.isArray(headerList)) {
-    headerList.forEach((entry) => {
-      if (!Array.isArray(entry) || entry.length < 2) return;
-      const [key, value] = entry as [string, string];
-      if (typeof key === 'string' && typeof value === 'string') {
-        normalized.append(key, value);
-      }
-    });
-
-    return normalized;
-  }
-
-  if (typeof headerList === 'object') {
-    Object.entries(headerList as Record<string, string | string[] | undefined>).forEach(([key, value]) => {
-      if (!key) return;
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (typeof item === 'string') {
-            normalized.append(key, item);
-          }
-        });
-      } else if (typeof value === 'string') {
-        normalized.append(key, value);
-      }
-    });
-  }
-
-  return normalized;
-}
-
 async function fetchRescheduleData(token: string): Promise<{ payload: RescheduleApiResponse | null; statusCode: number }> {
-  const headerList = headers();
-  const headerAccessor = normaliseHeaders(headerList);
-
-  const envDefaultUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
-  const envUrlHost = (() => {
-    if (!envDefaultUrl) return undefined;
-    try {
-      return new URL(envDefaultUrl).host;
-    } catch {
-      return envDefaultUrl;
-    }
-  })();
-
-  const host = headerAccessor.get('x-forwarded-host') ?? headerAccessor.get('host') ?? envUrlHost ?? 'localhost:3000';
-  const protocol =
-    headerAccessor.get('x-forwarded-proto') ?? (host.includes('localhost') ? 'http' : 'https');
-
-  const endpoint = new URL(`${protocol}://${host}/api/reschedule`);
+  const headerList = await headers();
+  const baseUrl = resolveAppBaseUrl(headerList);
+  const endpoint = new URL('/api/reschedule', baseUrl);
   endpoint.searchParams.set('token', token);
 
   try {

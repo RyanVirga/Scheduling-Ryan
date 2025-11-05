@@ -57,14 +57,16 @@ export class GoogleApiError extends Error {
 }
 
 export function getGoogleOAuthConfig(): GoogleOAuthConfig {
-  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN } = process.env;
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
 
-  const missing: string[] = [];
-  if (!GOOGLE_CLIENT_ID) missing.push("GOOGLE_CLIENT_ID");
-  if (!GOOGLE_CLIENT_SECRET) missing.push("GOOGLE_CLIENT_SECRET");
-  if (!GOOGLE_REFRESH_TOKEN) missing.push("GOOGLE_REFRESH_TOKEN");
+  if (!clientId || !clientSecret || !refreshToken) {
+    const missing: string[] = [];
+    if (!clientId) missing.push("GOOGLE_CLIENT_ID");
+    if (!clientSecret) missing.push("GOOGLE_CLIENT_SECRET");
+    if (!refreshToken) missing.push("GOOGLE_REFRESH_TOKEN");
 
-  if (missing.length > 0) {
     throw new GoogleAuthConfigError(
       `Missing required Google OAuth environment variables: ${missing.join(", ")}`,
       missing,
@@ -72,9 +74,9 @@ export function getGoogleOAuthConfig(): GoogleOAuthConfig {
   }
 
   return {
-    clientId: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    refreshToken: GOOGLE_REFRESH_TOKEN,
+    clientId,
+    clientSecret,
+    refreshToken,
   };
 }
 
