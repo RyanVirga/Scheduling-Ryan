@@ -1,0 +1,8 @@
+[
+  { "weekday": "monday", "start": "09:00", "end": "17:00" },
+  { "weekday": "tuesday", "start": "09:00", "end": "17:00" },
+  { "weekday": "wednesday", "start": "09:00", "end": "17:00" },
+  { "weekday": "thursday", "start": "09:00", "end": "17:00" },
+  { "weekday": "friday", "start": "09:00", "end": "15:00" }
+]
+
