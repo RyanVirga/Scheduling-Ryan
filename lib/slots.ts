@@ -18,7 +18,7 @@ const WEEKDAY_INDEX: Record<string, number> = {
 
 const ENV_HOST_TIMEZONE = process.env.TZ_DEFAULT_HOST ?? process.env.HOST_TIMEZONE;
 
-export const HOST_TIMEZONE = ENV_HOST_TIMEZONE ?? appSettings.hostTimezone ?? "America/New_York";
+export const HOST_TIMEZONE = ENV_HOST_TIMEZONE ?? appSettings.hostTimezone ?? "America/Los_Angeles";
 
 export const GUEST_TIMEZONE_OPTIONS = [
   { label: "Eastern Time (ET)", value: "America/New_York" },

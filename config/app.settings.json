@@ -1,5 +1,5 @@
 {
-  "hostTimezone": "America/New_York",
+  "hostTimezone": "America/Los_Angeles",
   "minNoticeMinutes": 60,
   "maxDaysOut": 60
 }
