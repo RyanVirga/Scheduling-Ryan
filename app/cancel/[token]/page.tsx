@@ -19,8 +19,8 @@ type CancelApiResponse = {
 };
 
 async function requestCancellation(token: string): Promise<{ result: CancelApiResponse; statusCode: number }> {
-  const headerList = await headers();
-  const baseUrl = resolveAppBaseUrl(headerList);
+  const requestHeaders = await headers();
+  const baseUrl = resolveAppBaseUrl(requestHeaders);
   const endpoint = new URL("/cancel", baseUrl);
   endpoint.searchParams.set("token", token);
 

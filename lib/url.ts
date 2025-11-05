@@ -1,4 +1,8 @@
-export type HeaderSource = Pick<Headers, "get"> | null | undefined;
+type HeaderLike = {
+  get(name: string): string | null;
+};
+
+export type HeaderSource = HeaderLike | null | undefined;
 
 function toHeaderSource(source?: Request | HeaderSource): HeaderSource {
   if (!source) {
